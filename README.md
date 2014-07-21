@@ -1,6 +1,6 @@
 # Lightning Talks
 
-Employees are encouraged to put together [lightning talks](http://en.wikipedia.org/wiki/Lightning_talk). Following [Ignite's](http://en.wikipedia.org/wiki/Ignite_(event\)) of presentation, slides auto advance every 15 seconds.
+Employees are encouraged to put together [lightning talks](http://en.wikipedia.org/wiki/Lightning_talk). Following [Ignite's](http://igniteshow.com/) of presentation, slides auto advance every 15 seconds.
 
 ## Reveal.js
 
