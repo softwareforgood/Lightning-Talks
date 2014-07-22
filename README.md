@@ -10,6 +10,8 @@ You can view this sample project live [here](http://softwareforgood.github.io/Li
 
 This template includes a configuration for reveal.js already. Slides auto-advance every 15 seconds and keyboard interaction is disabled. This forces speakers to stick to a specific time constraint.
 
+There is a template with 20 blank slides already setup in branch `20_slides`, which may make it easier to lay out your content.
+
 ## Authoring
 
 To setup your own lightning talk, clone down this repo, and edit the `<section>` tags inside of `<div class="slides">`.  Several sample slides are included with various types of formatting.  Each `<section>` is automatically considered its own slide.
