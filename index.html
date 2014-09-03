@@ -41,103 +41,152 @@
 			<div class="slides">
 				<section>
 					<h1>Password Security</h1>
-          <h3>...and maybe a little hashing</h3>
-				</section>
-
-				<section>
-					<h1>History of Passwords</h1>
-					<p>Used to validate and secure resources</p>
+					<p>Passwords: Used to validate and secure resources</p>
 				</section>
 
 				<section>
 					<h1>Easiest Password Check</h1>
 					<p>Store a Bob's password in a file. When verifying authentication, check the value he gives us to what is stored in that file.</p>
+          <p>Bob wants to prove to Alice that he is indeed Bob</p>
+          <p>Alice asks for some form of proof</p>
+          <p>Bob hands over his password</p>
+          <p>Alice confirms that the password she is given matches the password she has on file for Bob</p>
 				</section>
 
 				<section>
+					<h1>Brute Forcing</h1>
+					<h3>Just Keep Guessing</h3>
+          <img src="./img/dory.png">
+				</section>
+
+				<section>
+					<h1>Combating BF Attacks</h1>
+          <p>Add things like:</p>
+          <ul>
+            <li>Guess limits</li>
+            <li>Limited attempts</li>
+            <li>Lockout IP address after too many guesses</li>
+            <li>Reset password, email to user</li>
+          </ul>
+				</section>
+
+				<section data-autoslide="5000">
 					<h1>HTTP Basic Auth</h1>
-					<h3></h3>
+          <p>Base64 encoded username and password are sent as a header</p>
+          <p class="fragment" data-autoslide="5000">Base64 encoding is <b>NOT</b> secure</p>
+          <pre class="fragment">
+            <code>
+Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+Base64.decode('QWxhZGRpbjpvcGVuIHNlc2FtZQ==') >> Aladdin:open sesame
+            </code>
+          </pre>
 				</section>
 
 				<section>
-					<h1>Cookies</h1>
-					<h3></h3>
+					<h1>Session Cookies</h1>
+					<p>Piece of data the user's browser sends back with each request after logging in.</p>
+          <pre><code>document.cookie="certified=Alice's_notarized_letter"</code></pre>
+          <p>Can still be intercepted/spoofed on HTTP only traffic</p>
 				</section>
 
 				<section>
 					<h1>Wireshark</h1>
-					<h3></h3>
+					<p>Watch all traffic on local network</p>
+					<p>Non-HTTPS traffic can be monitored/intercepted</p>
+          <p>Copy session cookies and load them into your browser! You're now that user!</p>
 				</section>
 
 				<section>
 					<h1>FireSheep</h1>
-					<h3></h3>
+					<h4>Wireshark on Crack</h4>
+          <img src="./img/three.png">
+          <p>Double click a user to authenticate as them for the selected service</p>
 				</section>
 
 				<section>
 					<h1>Why HTTPS is Important</h1>
-					<h3></h3>
+          <p>Secures network traffic, preventing Wireshark et al from seeing your information</p>
+          <p>Required by law (in most states) when processing customer credit card information</p>
+          <p>See: PCI compliance</p>
 				</section>
 
 				<section>
 					<h1>Hashing</h1>
-          <p></p>
+          <p>One-way math problems</p>
+          <p>Easy to calculate, hard to reverse</p>
+          <img src="./img/one-way.png">
 				</section>
 
 				<section>
 					<h1>Hashed Passwords</h1>
-					<h3>Take password from Bob</h3>
+          <p>Used to secure passwords everywhere</p>
+          <p>Rails web apps, mobile apps, desktop OSs, etc</p>
+          <p>Prevent passwords from being lost of the password 'list' is stolen from Alice</p>
 				</section>
 
 				<section>
 					<h1>Windows Password Tables</h1>
-					<h3></h3>
-				</section>
-
-				<section>
-					<h1>Password Entropy</h1>
-					<h3></h3>
+					<p>Hashes user passwords and places them in a table</p>
+          <p>Limited to 2x7-character chunks</p>
+          <img src="./img/ophcrack.jpg">
 				</section>
 
 				<section>
 					<h1>Cracking Time</h1>
-					<h3></h3>
+					<p>Each character added makes it exponentially harder to crack</p>
+          <p>Commercial products can guess 2.8B passwords/sec</p>
 				</section>
 
 				<section>
-					<h1>Easy to Use Hard to Crack</h1>
-          <h3>correcthorsebatterystable</h3>
+					<h1>Password Entropy</h1>
+          <img src="./img/password_strength.png">
 				</section>
 
 				<section>
-          <h1>Google MD5</h1>
-					<h3></h3>
+          <h1>Easy to Use</h1>
+          <h1>Hard to Crack</h1>
+          <p><code>correcthorsebatterystable</code> takes far longer to guess than <code>Y0f$za51</code></p>
 				</section>
 
 				<section>
 					<h1>Rainbow Tables</h1>
-					<h3></h3>
+					<h3>Pre-calculated hashes</h3>
+          <p>Hashes lists of passwords, stores the original password and has in a database to be looked up later</p>
+          <p>Can be gigabytes to terabytes in size</p>
+          <p>Storage is cheaper than time</p>
+				</section>
+
+				<section>
+          <h1>Google MD5</h1>
+          <pre><code>
+$ md5 -s "password"
+MD5 ("password") = 5f4dcc3b5aa765d61d8327deb882cf99
+          </code></pre>
+          <img src="./img/goog_md5.png">
 				</section>
 
 				<section>
 					<h1>Salting</h1>
-					<h3></h3>
+          <p>Add some flavor to your passwords</p>
+          <code>md5(user_password + 'pepper') = d89eddeec748c49d5add2f8f347b8899</code>
+          <img src="./img/goog_salt.png">
 				</section>
 
 				<section>
 					<h1>Salting in Rails</h1>
-					<h3></h3>
+          <code>str = [password, salt].flatten.compact.join</code>
+          <code>Digest::MD5.hexdigest(str)</code>
+          <p>Devise gem uses bcrypt by default, which is far stronger than md5</p>
 				</section>
 
-				<section>
-					<h1></h1>
-					<h3></h3>
-				</section>
-
-				<section>
-					<h1></h1>
-					<h3></h3>
-				</section>
+        <section>
+          <h1>In Summary</h1>
+          <ul>
+            <li>Always use HTTPS</li>
+            <li>Salt & Hash Passwords</li>
+            <li>Prefer password length over "complexity"</li>
+          </ul>
+        </section>
 
 			</div>
 
@@ -151,12 +200,12 @@
 			// Full list of configuration options available here:
 			// https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
-				controls: false,
-        keyboard: false,
+				//controls: false,
+        //keyboard: false,
 				progress: false,
 				history: true,
 				center: true,
-        autoSlide: 15000,
+        //autoSlide: 15000,
         autoSlideStoppable: true,
 
 				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
